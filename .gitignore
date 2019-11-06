@@ -1,6 +1,8 @@
 *.iml
 .gradle
+.idea
 /local.properties
+/.idea/caches/build_file_checksums.ser
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -12,3 +14,8 @@
 /captures
 .externalNativeBuild
 .cxx
+build
+*.jks
+*.keystore
+/app/priguardMapping.txt
+/app/release
