@@ -12,7 +12,8 @@ class KtStringUtilTest {
     @Test
     fun cleaningData() {
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("E:\\jj.json")
+//        val fileStr = KtStringUtil.getStrInFile("E:\\jj.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/linux/jj.json")
         //2把json转换成list
         val listDatas = GsonBuilder().create()
             .fromJson<List<VideoBean>>(fileStr, object : TypeToken<List<VideoBean>>() {}.type)
@@ -47,7 +48,8 @@ class KtStringUtilTest {
         }
         //5把去重复的数据保存到文件中
         println("去重复后: " + list.size)
-        KtStringUtil.saveAsFileWriter("E:\\jj1.json", GsonBuilder().create().toJson(list))
+//        KtStringUtil.saveAsFileWriter("E:\\jj1.json", GsonBuilder().create().toJson(list))
+        KtStringUtil.saveAsFileWriter("/home/linux/jj1.json", GsonBuilder().create().toJson(list))
     }
 
     /**
@@ -56,8 +58,9 @@ class KtStringUtilTest {
     @Test
     fun cleaningDataTwo() {
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("E:\\jj1.json")
-        val fileStrTwo = KtStringUtil.getStrInFile("E:\\jjText.json")
+//        val fileStr = KtStringUtil.getStrInFile("E:\\jj1.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/linux/jj1.json")
+        val fileStrTwo = KtStringUtil.getStrInFile("/home/linux/jjText.json")
 //        //2把json转换成list
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
@@ -65,7 +68,7 @@ class KtStringUtilTest {
                 object : TypeToken<ArrayList<VideoBean>>() {}.type
             )
         val listDatasTwo = GsonBuilder().create()
-            .fromJson<List<VideoInfo>>(fileStr, object : TypeToken<List<VideoInfo>>() {}.type)
+            .fromJson<List<VideoInfo>>(fileStrTwo, object : TypeToken<List<VideoInfo>>() {}.type)
         for ((aa, av) in listDatasOne.withIndex()) {
             for ((bb, bv) in listDatasTwo.withIndex()) {
                 if (av.getvUrl() == bv.getvUrl()) {
@@ -81,7 +84,8 @@ class KtStringUtilTest {
             }
         }
         println("最终的: " + listDatasOne.size)
-        KtStringUtil.saveAsFileWriter("E:\\jjok.json", GsonBuilder().create().toJson(listDatasOne))
+//        KtStringUtil.saveAsFileWriter("E:\\jjok.json", GsonBuilder().create().toJson(listDatasOne))
+        KtStringUtil.saveAsFileWriter("/home/linux/jjok.json", GsonBuilder().create().toJson(listDatasOne))
     }
 
     /**

@@ -9,12 +9,12 @@ class KtStringUtil {
             val encoding = "UTF-8"
             val file = File(filePash)
             val filelength = file.length()
-            val filecontent = ByteArray(filelength!!.toInt())
+            val filecontent = ByteArray(filelength.toInt())
             try {
                 val `in` = FileInputStream(file)
                 `in`.read(filecontent)
                 `in`.close()
-            } catch (e: FileNotFoundException) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             } catch (e: IOException) {
                 e.printStackTrace()
