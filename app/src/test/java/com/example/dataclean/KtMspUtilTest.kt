@@ -6,40 +6,25 @@ import org.junit.Test
 
 /**
  * @author : C4_疫染黎明
- * 描述 :jj的数据清洗工具类
+ * 描述 :msp的数据清洗工具类
  * 主要功能 :
  * 维护人员 : C4_疫染黎明
  * date : 20-1-2 上午10:51
+ * KtZzhmtynUtilTest
  */
-class KtStringUtilTest {
+class KtMspUtilTest {
     /**
-     * A完整数据并去重复
+     * A去重复
      */
     @Test
     fun cleaningData() {
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("E:\\jj.json")
-        val fileStr = KtStringUtil.getStrInFile("/home/iori/jj.json")
+//        val fileStr = KtStringUtil.getStrInFile("E:\\msp.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/iori/msp.json")
         //2把json转换成list
         val listDatas = GsonBuilder().create()
             .fromJson<List<VideoBean>>(fileStr, object : TypeToken<List<VideoBean>>() {}.type)
         println("一共: " + listDatas.size)
-        //3把不完整的数据填写完整
-        for ((aa, av) in listDatas.withIndex()) {
-            for ((bb, bv) in listDatas.withIndex()) {
-                if (av.id != bv.id
-                    && av.name == bv.name
-                    && av.getpUrl().isNullOrEmpty()
-                    && av.getvUrl().isNotEmpty()
-                    && bv.getvUrl().isNullOrEmpty()
-                    && bv.getpUrl().isNotEmpty()
-                ) {
-                    av.setpUrl(bv.getpUrl())
-                    av.tags = bv.tags
-                    bv.setvUrl(av.getvUrl())
-                }
-            }
-        }
         //4对对象进行去重操作
         val set = LinkedHashSet<VideoBean>()
         val list = ArrayList<VideoBean>()
@@ -54,9 +39,10 @@ class KtStringUtilTest {
         }
         //5把去重复的数据保存到文件中
         println("去重复后: " + list.size)
-//        KtStringUtil.saveAsFileWriter("E:\\jj1.json", GsonBuilder().create().toJson(list))
-        KtStringUtil.saveAsFileWriter("/home/iori/jj1.json", GsonBuilder().create().toJson(list))
+//        KtStringUtil.saveAsFileWriter("E:\\msp1.json", GsonBuilder().create().toJson(list))
+        KtStringUtil.saveAsFileWriter("/home/iori/msp1.json", GsonBuilder().create().toJson(list))
     }
+
 
     /**
      * B1把不能播放的数据删除并把最终结果保存到本地
@@ -64,9 +50,8 @@ class KtStringUtilTest {
     @Test
     fun cleaningDataTwo() {
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("E:\\jj1.json")
-        val fileStr = KtStringUtil.getStrInFile("/home/iori/jj1.json")
-        val fileStrTwo = KtStringUtil.getStrInFile("/home/iori/jjText.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/iori/msp1.json")
+        val fileStrTwo = KtStringUtil.getStrInFile("/home/iori/msptext.json")
 //        //2把json转换成list
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
@@ -90,9 +75,8 @@ class KtStringUtilTest {
             }
         }
         println("最终的: " + listDatasOne.size)
-//        KtStringUtil.saveAsFileWriter("E:\\jjok.json", GsonBuilder().create().toJson(listDatasOne))
         KtStringUtil.saveAsFileWriter(
-            "/home/iori/jjok.json",
+            "/home/iori/mspok.json",
             GsonBuilder().create().toJson(listDatasOne)
         )
     }
@@ -103,7 +87,7 @@ class KtStringUtilTest {
     @Test
     fun cleaningDataThree() {
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/iori/jjok.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/iori/mspok.json")
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
                 fileStr,
@@ -111,11 +95,11 @@ class KtStringUtilTest {
             )
         val zongList = KtStringUtil.averageAssign(listDatasOne, 2)
         KtStringUtil.saveAsFileWriter(
-            "/home/iori/jjok1.json",
+            "/home/iori/msp1.json",
             GsonBuilder().create().toJson(zongList?.get(0))
         )
         KtStringUtil.saveAsFileWriter(
-            "/home/iori/jjok2.json",
+            "/home/iori/msp2.json",
             GsonBuilder().create().toJson(zongList?.get(1))
         )
     }

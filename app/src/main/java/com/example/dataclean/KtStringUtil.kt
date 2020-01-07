@@ -69,5 +69,31 @@ class KtStringUtil {
             }
             return stringListHashMap
         }
+
+
+        fun <T> averageAssign(
+            source: List<T>,
+            n: Int
+        ): List<List<T>>? {
+            val result: MutableList<List<T>> =
+                java.util.ArrayList()
+            var remainder = source.size % n //(先计算出余数)
+            val number = source.size / n //然后是商
+            var offset = 0 //偏移量
+            for (i in 0 until n) {
+                var value: List<T>? = null
+                if (remainder > 0) {
+                    value = source.subList(i * number + offset, (i + 1) * number + offset + 1)
+                    remainder--
+                    offset++
+                } else {
+                    value = source.subList(i * number + offset, (i + 1) * number + offset)
+                }
+                result.add(value)
+            }
+            return result
+        }
+
+
     }
 }

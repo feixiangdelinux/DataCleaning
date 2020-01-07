@@ -6,20 +6,19 @@ import org.junit.Test
 
 /**
  * @author : C4_疫染黎明
- * 描述 :jj的数据清洗工具类
+ * 描述 :
  * 主要功能 :
  * 维护人员 : C4_疫染黎明
- * date : 20-1-2 上午10:51
+ * date : 20-1-7 上午9:19
  */
-class KtStringUtilTest {
+class KtZzhmtynUtilTest {
     /**
      * A完整数据并去重复
      */
     @Test
     fun cleaningData() {
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("E:\\jj.json")
-        val fileStr = KtStringUtil.getStrInFile("/home/iori/jj.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/iori/zzhmtyn.json")
         //2把json转换成list
         val listDatas = GsonBuilder().create()
             .fromJson<List<VideoBean>>(fileStr, object : TypeToken<List<VideoBean>>() {}.type)
@@ -54,19 +53,16 @@ class KtStringUtilTest {
         }
         //5把去重复的数据保存到文件中
         println("去重复后: " + list.size)
-//        KtStringUtil.saveAsFileWriter("E:\\jj1.json", GsonBuilder().create().toJson(list))
-        KtStringUtil.saveAsFileWriter("/home/iori/jj1.json", GsonBuilder().create().toJson(list))
+        KtStringUtil.saveAsFileWriter("/home/iori/zzhmtyn1.json", GsonBuilder().create().toJson(list))
     }
-
     /**
      * B1把不能播放的数据删除并把最终结果保存到本地
      */
     @Test
     fun cleaningDataTwo() {
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("E:\\jj1.json")
-        val fileStr = KtStringUtil.getStrInFile("/home/iori/jj1.json")
-        val fileStrTwo = KtStringUtil.getStrInFile("/home/iori/jjText.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/iori/zzhmtyn1.json")
+        val fileStrTwo = KtStringUtil.getStrInFile("/home/iori/zzhmtyntext.json")
 //        //2把json转换成list
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
@@ -90,9 +86,8 @@ class KtStringUtilTest {
             }
         }
         println("最终的: " + listDatasOne.size)
-//        KtStringUtil.saveAsFileWriter("E:\\jjok.json", GsonBuilder().create().toJson(listDatasOne))
         KtStringUtil.saveAsFileWriter(
-            "/home/iori/jjok.json",
+            "/home/iori/zzhmtynok.json",
             GsonBuilder().create().toJson(listDatasOne)
         )
     }
@@ -103,7 +98,7 @@ class KtStringUtilTest {
     @Test
     fun cleaningDataThree() {
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/iori/jjok.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/iori/zzhmtynok.json")
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
                 fileStr,
