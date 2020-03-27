@@ -110,13 +110,19 @@ class KtStringUtilTest {
                 object : TypeToken<ArrayList<VideoBean>>() {}.type
             )
         val zongList = KtStringUtil.averageAssign(listDatasOne, 2)
+        val aa = FinalVideoBean()
+        aa.timeStamp = System.currentTimeMillis()
+        aa.data = zongList!![0]
         KtStringUtil.saveAsFileWriter(
             "/home/iori/jjok1.json",
-            GsonBuilder().create().toJson(zongList?.get(0))
+            GsonBuilder().create().toJson(aa)
         )
+        val bb = FinalVideoBean()
+        bb.timeStamp = System.currentTimeMillis()
+        bb.data = zongList[1]
         KtStringUtil.saveAsFileWriter(
             "/home/iori/jjok2.json",
-            GsonBuilder().create().toJson(zongList?.get(1))
+            GsonBuilder().create().toJson(bb)
         )
     }
 }
