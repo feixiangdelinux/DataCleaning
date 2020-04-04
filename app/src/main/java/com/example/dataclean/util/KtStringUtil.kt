@@ -1,5 +1,6 @@
-package com.example.dataclean
+package com.example.dataclean.util
 
+import com.example.dataclean.entity.VideoBean
 import java.io.*
 
 class KtStringUtil {

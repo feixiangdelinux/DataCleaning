@@ -1,4 +1,4 @@
-package com.example.dataclean;
+package com.example.dataclean.entity;
 
 public class VideoInfo {
     private int id;

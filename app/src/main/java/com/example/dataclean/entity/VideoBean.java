@@ -1,4 +1,4 @@
-package com.example.dataclean;
+package com.example.dataclean.entity;
 
 import java.util.Objects;
 

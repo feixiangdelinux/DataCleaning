@@ -1,5 +1,9 @@
 package com.example.dataclean
 
+import com.example.dataclean.entity.FinalVideoBean
+import com.example.dataclean.entity.VideoBean
+import com.example.dataclean.entity.VideoInfo
+import com.example.dataclean.util.KtStringUtil
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import org.junit.Test
