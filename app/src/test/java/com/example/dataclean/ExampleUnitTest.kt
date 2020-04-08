@@ -31,7 +31,7 @@ class ExampleUnitTest {
     @Test
     fun buildSimpleFile() {
         //1配置参数(根据参数生成文件)
-        //文件生成位置路径
+        //文件生成位置路径以/结尾的文件夹路径
         val buildBean = BuildBean()
         //创建的Module的位置
         buildBean.filePath = "/home/ccg/Project/AndroidProject/AndroidKsbaoPro/modulenine/"
@@ -71,16 +71,16 @@ class ExampleUnitTest {
         //1配置参数(根据参数生成文件)
         //文件生成位置路径
         val buildBean = BuildBean()
-        //创建的Module的位置
-        buildBean.filePath = "/home/ccg/Project/AndroidProject/AndroidKsbaoPro/modulenine/"
+        //创建的Module的位置以/结尾的文件夹路径
+        buildBean.filePath = "/home/ccg/project/AndroidProjects/androidksbaopro/moduleseven/"
         //Application/Library name
-        buildBean.applicationName = "Module Nine"
+        buildBean.applicationName = "Module Seven"
         //Package name
-        buildBean.packageName = "com.yingsoft.ksbao.modulenine"
+        buildBean.packageName = "com.yingsoft.ksbao.moduleseven"
         //Activity Name
-        buildBean.activityName = "TestActivity"
+        buildBean.activityName = "SelectSubjectActivity"
         //Layout Name
-        buildBean.layoutId = "activity_test"
+        buildBean.layoutId = "activity_select_subject"
         //2开始生成文件
         GenerateUtil.generateAndroidKsbaoPro(buildBean)
         //3对生成文件进行补全
@@ -88,6 +88,29 @@ class ExampleUnitTest {
         //layout中布局文件进行转换(转换成databinding)
         print("为AndroidKsbaoPro生成专用module文件成功")
     }
+    @Test
+    fun buildAndroidKsbaoProFileMVVm() {
+        //1配置参数(根据参数生成文件)
+        //文件生成位置路径
+        val buildBean = BuildBean()
+        //创建的Module的位置以/结尾的文件夹路径
+        buildBean.filePath = "/home/ccg/project/AndroidProjects/androidksbaopro/moduleseven/"
+        //Application/Library name
+        buildBean.applicationName = "Module Seven"
+        //Package name
+        buildBean.packageName = "com.yingsoft.ksbao.moduleseven"
+        //Activity Name
+        buildBean.activityName = "SubjectDetailsActivity"
+        //Layout Name
+        buildBean.layoutId = "activity_subject_details"
+        //2开始生成文件
+        GenerateUtil.generateMVVM(buildBean)
+        //3对生成文件进行补全
+        //debug中的AndroidManifest.xml进去自动补全
+        //layout中布局文件进行转换(转换成databinding)
+        print("为AndroidKsbaoPro生成MVVM文件成功")
+    }
+
 
     @Test
     fun addition_isCorrect() {
