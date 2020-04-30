@@ -7,7 +7,7 @@ import com.blankj.utilcode.util.StringUtils;
  * 描述 :
  * 主要功能 :
  * 维护人员 : C4_雍和
- * date : 20-4-4 下午3:52
+ * date : 20-4-22 下午4:13
  */
 public class BuildBean {
     private final String middlePath = "src/main/java/";

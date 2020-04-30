@@ -72,15 +72,15 @@ class ExampleUnitTest {
         //文件生成位置路径
         val buildBean = BuildBean()
         //创建的Module的位置以/结尾的文件夹路径
-        buildBean.filePath = "/home/ccg/project/AndroidProjects/androidksbaopro/moduleseven/"
+        buildBean.filePath = "/home/ccg/Project/androidksbaopro/moduleeight/"
         //Application/Library name
-        buildBean.applicationName = "Module Seven"
+        buildBean.applicationName = "Module Eight"
         //Package name
-        buildBean.packageName = "com.yingsoft.ksbao.moduleseven"
+        buildBean.packageName = "com.yingsoft.ksbao.moduleeight"
         //Activity Name
-        buildBean.activityName = "SelectSubjectActivity"
+        buildBean.activityName = "SystemMessageActivity"
         //Layout Name
-        buildBean.layoutId = "activity_select_subject"
+        buildBean.layoutId = "activity_system_message"
         //2开始生成文件
         GenerateUtil.generateAndroidKsbaoPro(buildBean)
         //3对生成文件进行补全
@@ -94,15 +94,15 @@ class ExampleUnitTest {
         //文件生成位置路径
         val buildBean = BuildBean()
         //创建的Module的位置以/结尾的文件夹路径
-        buildBean.filePath = "/home/ccg/project/AndroidProjects/androidksbaopro/moduleseven/"
+        buildBean.filePath = "/home/ccg/Project/androidksbaopro/moduleseven/"
         //Application/Library name
         buildBean.applicationName = "Module Seven"
         //Package name
         buildBean.packageName = "com.yingsoft.ksbao.moduleseven"
         //Activity Name
-        buildBean.activityName = "SubjectDetailsActivity"
+        buildBean.activityName = "TestActivity"
         //Layout Name
-        buildBean.layoutId = "activity_subject_details"
+        buildBean.layoutId = "activity_text"
         //2开始生成文件
         GenerateUtil.generateMVVM(buildBean)
         //3对生成文件进行补全
