@@ -9,21 +9,20 @@ import com.google.gson.reflect.TypeToken
 import org.junit.Test
 
 /**
- * @author : C4_疫染黎明
- * 描述 :jj的数据清洗工具类
+ * @author : C4_雍和
+ * 描述 :
  * 主要功能 :
- * 维护人员 : C4_疫染黎明
- * date : 20-1-2 上午10:51
+ * 维护人员 : C4_雍和
+ * date : 20-6-12 上午9:11
  */
-class KtStringUtilTest {
+class BuzzUtilTest {
     /**
-     * A完整数据并去重复
+     * A完整数据并去重复/home/ccg
      */
     @Test
     fun cleaningData() {
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("E:\\jj.json")
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/jj.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
         //2把json转换成list
         val listDatas = GsonBuilder().create()
             .fromJson<List<VideoBean>>(fileStr, object : TypeToken<List<VideoBean>>() {}.type)
@@ -58,9 +57,9 @@ class KtStringUtilTest {
         }
         //5把去重复的数据保存到文件中
         println("去重复后: " + list.size)
-//        KtStringUtil.saveAsFileWriter("E:\\jj1.json", GsonBuilder().create().toJson(list))
-        KtStringUtil.saveAsFileWriter("/home/ccg/jj1.json", GsonBuilder().create().toJson(list))
+        KtStringUtil.saveAsFileWriter("/home/ccg/buzz1.json", GsonBuilder().create().toJson(list))
     }
+
 
     /**
      * B1把不能播放的数据删除并把最终结果保存到本地
@@ -68,9 +67,8 @@ class KtStringUtilTest {
     @Test
     fun cleaningDataTwo() {
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("E:\\jj1.json")
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/jj1.json")
-        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/jjText.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz1.json")
+        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/buzzText.json")
 //        //2把json转换成list
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
@@ -94,9 +92,8 @@ class KtStringUtilTest {
             }
         }
         println("最终的: " + listDatasOne.size)
-//        KtStringUtil.saveAsFileWriter("E:\\jjok.json", GsonBuilder().create().toJson(listDatasOne))
         KtStringUtil.saveAsFileWriter(
-            "/home/ccg/jjok.json",
+            "/home/ccg/buzzok.json",
             GsonBuilder().create().toJson(listDatasOne)
         )
     }
@@ -107,33 +104,47 @@ class KtStringUtilTest {
     @Test
     fun cleaningDataThree() {
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/jjok.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzzok.json")
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
                 fileStr,
                 object : TypeToken<ArrayList<VideoBean>>() {}.type
             )
-        val zongList = KtStringUtil.averageAssign(listDatasOne, 3)
+        val zongList = KtStringUtil.averageAssign(listDatasOne, 5)
         val aa = FinalVideoBean()
         aa.timeStamp = System.currentTimeMillis()
         aa.data = zongList!![0]
         KtStringUtil.saveAsFileWriter(
-            "/home/ccg/jjok1.json",
+            "/home/ccg/buzz1.json",
             GsonBuilder().create().toJson(aa)
         )
         val bb = FinalVideoBean()
         bb.timeStamp = System.currentTimeMillis()
         bb.data = zongList[1]
         KtStringUtil.saveAsFileWriter(
-            "/home/ccg/jjok2.json",
+            "/home/ccg/buzz2.json",
             GsonBuilder().create().toJson(bb)
         )
         val cc = FinalVideoBean()
         cc.timeStamp = System.currentTimeMillis()
         cc.data = zongList[2]
         KtStringUtil.saveAsFileWriter(
-            "/home/ccg/jjok3.json",
+            "/home/ccg/buzz3.json",
             GsonBuilder().create().toJson(cc)
+        )
+        val dd = FinalVideoBean()
+        dd.timeStamp = System.currentTimeMillis()
+        dd.data = zongList[3]
+        KtStringUtil.saveAsFileWriter(
+            "/home/ccg/buzz4.json",
+            GsonBuilder().create().toJson(dd)
+        )
+        val ee = FinalVideoBean()
+        ee.timeStamp = System.currentTimeMillis()
+        ee.data = zongList[4]
+        KtStringUtil.saveAsFileWriter(
+            "/home/ccg/buzz5.json",
+            GsonBuilder().create().toJson(ee)
         )
     }
 }
