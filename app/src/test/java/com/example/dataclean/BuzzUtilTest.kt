@@ -147,4 +147,25 @@ class BuzzUtilTest {
             GsonBuilder().create().toJson(ee)
         )
     }
+
+    /**
+     * B2把最终结果分解成几份
+     */
+    @Test
+    fun cleaningDataFour() {
+        //1加载json文件到内存中
+        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
+        val listDatasOne = GsonBuilder().create()
+            .fromJson<ArrayList<VideoBean>>(
+                fileStr,
+                object : TypeToken<ArrayList<VideoBean>>() {}.type
+            )
+        val zongList = KtStringUtil.averageAssign(listDatasOne, 10)
+        for ((index, e) in zongList!!.withIndex()) {
+            KtStringUtil.saveAsFileWriter(
+                "/home/ccg/buzz$index.txt",
+                GsonBuilder().create().toJson(e)
+            )
+        }
+    }
 }

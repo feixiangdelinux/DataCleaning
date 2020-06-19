@@ -8,6 +8,11 @@ public class VideoBean {
     private String name;
     private String url;
     private String e;
+    /**
+     * 0为检验
+     * 1能播
+     * 2不能播
+     */
     private String i;
     private String tags;
     private String pUrl;
