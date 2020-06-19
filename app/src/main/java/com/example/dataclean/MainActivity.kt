@@ -1,6 +1,7 @@
 package com.example.dataclean
 
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -37,9 +38,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        );
         setContentView(R.layout.activity_main)
+        videoPlayer = findViewById<StandardGSYVideoPlayer>(R.id.detail_player)
+        mTextView = findViewById<TextView>(R.id.main_tv)
         Timber.plant(DebugTree())
         filePash = context.externalCacheDir!!.absolutePath + "/buzz.txt"
+        Timber.e("250:  " + filePash)
         //1读取文件成字符串
         val str = FileIOUtils.readFile2String(filePash)
         //3字符串转json,json转list
@@ -48,17 +56,14 @@ class MainActivity : AppCompatActivity() {
         listDatas.addAll(listDatsfdsas)
         allSize = listDatas.size
         //5得到数据开始播放
-        videoPlayer = findViewById<StandardGSYVideoPlayer>(R.id.detail_player)
-        mTextView = findViewById<TextView>(R.id.main_tv)
         videoCallBack()
         getVideoData()
-        playVideo()
+        playVideo(position)
         findViewById<Button>(R.id.main_btn_stop).setOnClickListener {
             val json = GsonBuilder().create().toJson(listDatas)
             FileIOUtils.writeFileFromString(filePash, json)
             mTextView.text = "保存成功"
         }
-
     }
 
     override fun onPause() {
@@ -77,11 +82,29 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun playVideo() {
+    private fun playVideo(inde: Int) {
         val vUrl = listDatas[position].getvUrl()
         Timber.e("250:  " + vUrl)
         videoPlayer.setUp(vUrl, false, "")
         videoPlayer.startPlayLogic()
+        DownTimer.getInstance().startDown(60000)
+        DownTimer.getInstance().setListener(object : DownTimerListener {
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+            //倒计时结束的方法
+            override fun onFinish() {
+                if (inde == position) {
+                    Timber.e("250:  " + "aaaaaaaaaaaaaaaaaaaaaaaaa")
+                    mTextView.text =
+                        "倒计时____倒计时当前第${position}个,一共${allSize}个，进度：${(position / allSize) * 100}%"
+                    listDatas[position].i = "2"
+                    getVideoData()
+                    playVideo(position)
+                }
+            }
+        })
+
     }
 
     /**
@@ -138,7 +161,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPrepared(url: String?, vararg objects: Any?) {
-                mTextView.text = "当前第${position}个,一共${allSize}个，进度：${(position / allSize) * 100}%"
+                mTextView.text = "当前第${position}个,一共${allSize}个，进度：${(position * 100) / allSize}%"
                 listDatas[position].i = "1"
                 getVideoData()
                 DownTimer.getInstance().startDown(1000)
@@ -148,8 +171,7 @@ class MainActivity : AppCompatActivity() {
 
                     //倒计时结束的方法
                     override fun onFinish() {
-                        playVideo()
-
+                        playVideo(position)
                     }
                 })
             }
@@ -173,7 +195,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPlayError(url: String?, vararg objects: Any?) {
-                mTextView.text = "当前第${position}个,一共${allSize}个，进度：${(position / allSize) * 100}%"
+                mTextView.text = "当前第${position}个,一共${allSize}个，进度：${(position * 100) / allSize}%"
                 listDatas[position].i = "2"
                 getVideoData()
                 DownTimer.getInstance().startDown(1000)
@@ -183,8 +205,7 @@ class MainActivity : AppCompatActivity() {
 
                     //倒计时结束的方法
                     override fun onFinish() {
-                        playVideo()
-
+                        playVideo(position)
                     }
                 })
             }
