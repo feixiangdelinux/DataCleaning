@@ -1,6 +1,7 @@
 package com.example.dataclean
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -35,7 +36,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var videoPlayer: StandardGSYVideoPlayer
     private lateinit var mTextView: TextView
 
+    private val mTotalTime = 60000.toLong()
+    private val mTickTime = 60000.toLong()
 
+    private var mCountDownTimer: CountDownTimer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(
@@ -66,6 +70,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun startCountDown() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer!!.start()
+        } else {
+            mCountDownTimer = object : CountDownTimer(mTotalTime, mTickTime) {
+                override fun onTick(millisUntilFinished: Long) {
+                }
+
+                override fun onFinish() {
+                    Timber.e("250:  " + "aaaaaaaaaaaaaaaaaaaaaaaaa")
+                    mTextView.text =
+                        "倒计时____倒计时当前第${position}个,一共${allSize}个，进度：${(position / allSize) * 100}%"
+                    listDatas[position].i = "2"
+                    getVideoData()
+                    playVideo(position)
+                }
+            }
+            mCountDownTimer!!.start()
+        }
+    }
+
+    /*
+     * 重启倒计时
+     */
+    fun restartCountDown() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer!!.cancel()
+            mCountDownTimer!!.start()
+        } else {
+            startCountDown()
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         videoPlayer.onVideoPause()
@@ -87,24 +124,7 @@ class MainActivity : AppCompatActivity() {
         Timber.e("250:  " + vUrl)
         videoPlayer.setUp(vUrl, false, "")
         videoPlayer.startPlayLogic()
-        DownTimer.getInstance().startDown(60000)
-        DownTimer.getInstance().setListener(object : DownTimerListener {
-            override fun onTick(millisUntilFinished: Long) {
-            }
-
-            //倒计时结束的方法
-            override fun onFinish() {
-                if (inde == position) {
-                    Timber.e("250:  " + "aaaaaaaaaaaaaaaaaaaaaaaaa")
-                    mTextView.text =
-                        "倒计时____倒计时当前第${position}个,一共${allSize}个，进度：${(position / allSize) * 100}%"
-                    listDatas[position].i = "2"
-                    getVideoData()
-                    playVideo(position)
-                }
-            }
-        })
-
+        restartCountDown()
     }
 
     /**
@@ -164,7 +184,7 @@ class MainActivity : AppCompatActivity() {
                 mTextView.text = "当前第${position}个,一共${allSize}个，进度：${(position * 100) / allSize}%"
                 listDatas[position].i = "1"
                 getVideoData()
-                DownTimer.getInstance().startDown(1000)
+                DownTimer.getInstance().startDown(3000)
                 DownTimer.getInstance().setListener(object : DownTimerListener {
                     override fun onTick(millisUntilFinished: Long) {
                     }
@@ -198,7 +218,7 @@ class MainActivity : AppCompatActivity() {
                 mTextView.text = "当前第${position}个,一共${allSize}个，进度：${(position * 100) / allSize}%"
                 listDatas[position].i = "2"
                 getVideoData()
-                DownTimer.getInstance().startDown(1000)
+                DownTimer.getInstance().startDown(3000)
                 DownTimer.getInstance().setListener(object : DownTimerListener {
                     override fun onTick(millisUntilFinished: Long) {
                     }
