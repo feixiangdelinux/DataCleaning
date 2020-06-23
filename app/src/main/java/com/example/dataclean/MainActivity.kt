@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onFinish() {
                     mTextView.text =
-                        "倒计时____倒计时当前第${position}个,一共${allSize}个，进度：${(position / allSize) * 100}%"
+                        "倒计时____倒计时当前第${position}个,一共${allSize}个，进度：${(position * 100) / allSize}%"
                     listDatas[position].i = "2"
                     getVideoData()
                     playVideo(position)
@@ -120,8 +120,11 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun playVideo(inde: Int) {
+        if (position % 500 == 0) {
+            val json = GsonBuilder().create().toJson(listDatas)
+            FileIOUtils.writeFileFromString(filePash, json)
+        }
         val vUrl = listDatas[position].getvUrl()
-        Timber.e("250:  " + vUrl)
         videoPlayer.setUp(vUrl, false, "")
         videoPlayer.startPlayLogic()
         restartCountDown()

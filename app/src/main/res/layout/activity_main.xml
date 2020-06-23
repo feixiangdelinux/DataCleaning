@@ -21,10 +21,17 @@
         android:text="停止"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
-        app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/detail_player"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <FrameLayout
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
