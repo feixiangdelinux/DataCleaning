@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * 总的视频数据
+     *
      */
     var listDatas: MutableList<VideoBean> = ArrayList()
 
@@ -79,7 +80,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFinish() {
-                    Timber.e("250:  " + "aaaaaaaaaaaaaaaaaaaaaaaaa")
                     mTextView.text =
                         "倒计时____倒计时当前第${position}个,一共${allSize}个，进度：${(position / allSize) * 100}%"
                     listDatas[position].i = "2"
