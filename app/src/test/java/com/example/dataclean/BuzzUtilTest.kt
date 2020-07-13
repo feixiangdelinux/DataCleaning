@@ -10,7 +10,7 @@ import org.junit.Test
 
 /**
  * @author : C4_雍和
- * 描述 :
+ * 描述 :SistersUtilTest
  * 主要功能 :
  * 维护人员 : C4_雍和
  * date : 20-6-12 上午9:11
@@ -98,6 +98,40 @@ class BuzzUtilTest {
         )
     }
 
+
+
+
+    /**
+     * B1把不能播放的数据删除并把最终结果保存到本地
+     */
+    @Test
+    fun cleaningDataFive() {
+        //1加载json文件到内存中
+        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.txt")
+//        //2把json转换成list
+        val listDatasOne = GsonBuilder().create()
+            .fromJson<ArrayList<VideoBean>>(
+                fileStr,
+                object : TypeToken<ArrayList<VideoBean>>() {}.type
+            )
+        println("刚开始的: " + listDatasOne.size)
+        val it = listDatasOne.iterator()
+        while (it.hasNext()) {
+            val item = it.next()
+            if (item.i != "1") {
+                it.remove()
+            }
+        }
+        println("最终的: " + listDatasOne.size)
+        KtStringUtil.saveAsFileWriter(
+            "/home/ccg/buzzok.json",
+            GsonBuilder().create().toJson(listDatasOne)
+        )
+    }
+
+
+
+
     /**
      * B2把最终结果分解成几份
      */
@@ -110,7 +144,7 @@ class BuzzUtilTest {
                 fileStr,
                 object : TypeToken<ArrayList<VideoBean>>() {}.type
             )
-        val zongList = KtStringUtil.averageAssign(listDatasOne, 5)
+        val zongList = KtStringUtil.averageAssign(listDatasOne, 3)
         val aa = FinalVideoBean()
         aa.timeStamp = System.currentTimeMillis()
         aa.data = zongList!![0]
@@ -131,20 +165,6 @@ class BuzzUtilTest {
         KtStringUtil.saveAsFileWriter(
             "/home/ccg/buzz3.json",
             GsonBuilder().create().toJson(cc)
-        )
-        val dd = FinalVideoBean()
-        dd.timeStamp = System.currentTimeMillis()
-        dd.data = zongList[3]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/buzz4.json",
-            GsonBuilder().create().toJson(dd)
-        )
-        val ee = FinalVideoBean()
-        ee.timeStamp = System.currentTimeMillis()
-        ee.data = zongList[4]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/buzz5.json",
-            GsonBuilder().create().toJson(ee)
         )
     }
 

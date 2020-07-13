@@ -72,15 +72,15 @@ class ExampleUnitTest {
         //文件生成位置路径
         val buildBean = BuildBean()
         //创建的Module的位置以/结尾的文件夹路径
-        buildBean.filePath = "/home/ccg/Project/androidksbaopro/moduleeight/"
+        buildBean.filePath = "/home/ccg/Project/AndroidStudioProjects/androidksbaopro/modulenine/"
         //Application/Library name
-        buildBean.applicationName = "Module Eight"
+        buildBean.applicationName = "Module Nine"
         //Package name
-        buildBean.packageName = "com.yingsoft.ksbao.moduleeight"
+        buildBean.packageName = "com.yingsoft.ksbao.modulenine"
         //Activity Name
-        buildBean.activityName = "SystemMessageActivity"
+        buildBean.activityName = "MachineTalkActivity"
         //Layout Name
-        buildBean.layoutId = "activity_system_message"
+        buildBean.layoutId = "activity_machine_talk"
         //2开始生成文件
         GenerateUtil.generateAndroidKsbaoPro(buildBean)
         //3对生成文件进行补全
