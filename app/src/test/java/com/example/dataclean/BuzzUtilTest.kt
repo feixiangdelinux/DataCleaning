@@ -34,40 +34,40 @@ class BuzzUtilTest {
         setOne.addAll(listDatas)
         listOne.addAll(setOne)
         println("原始数据去重后一共: " + listOne.size)
-        //3把不完整的数据填写完整
-        for (videoUrlData in listOne) {
-            for (pictureUrlData in listOne) {
-                if (videoUrlData.id != pictureUrlData.id
-                    && videoUrlData.name == pictureUrlData.name
-                    && videoUrlData.getpUrl().isNullOrEmpty()
-                    && videoUrlData.getvUrl().isNotEmpty()
-                    && pictureUrlData.getvUrl().isNullOrEmpty()
-                    && pictureUrlData.getpUrl().isNotEmpty()
-                ) {
-                    videoUrlData.setpUrl(pictureUrlData.getpUrl())
-                    videoUrlData.tags = pictureUrlData.tags
-                    pictureUrlData.setvUrl(videoUrlData.getvUrl())
-                }
-            }
-        }
-        //4对对象进行去重操作
-        val set = LinkedHashSet<VideoBean>()
-        val list = ArrayList<VideoBean>()
-        set.addAll(listOne)
-        list.addAll(set)
-        val iterator = list.iterator()
-        while (iterator.hasNext()) {
-            val item = iterator.next()
-            if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
-                iterator.remove()
-            }
-        }
-        //5把去重复的数据保存到文件中
-        println("去重复后: " + list.size)
-//        KtStringUtil.saveAsFileWriter("/home/ccg/buzz1.json", GsonBuilder().create().toJson(list))
-        KtStringUtil.saveAsFileWriter("E:\\buzz1.json", GsonBuilder().create().toJson(list))
-        val endTime = System.currentTimeMillis()
-        println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
+//        //3把不完整的数据填写完整
+//        for (videoUrlData in listOne) {
+//            for (pictureUrlData in listOne) {
+//                if (videoUrlData.id != pictureUrlData.id
+//                    && videoUrlData.name == pictureUrlData.name
+//                    && videoUrlData.getpUrl().isNullOrEmpty()
+//                    && videoUrlData.getvUrl().isNotEmpty()
+//                    && pictureUrlData.getvUrl().isNullOrEmpty()
+//                    && pictureUrlData.getpUrl().isNotEmpty()
+//                ) {
+//                    videoUrlData.setpUrl(pictureUrlData.getpUrl())
+//                    videoUrlData.tags = pictureUrlData.tags
+//                    pictureUrlData.setvUrl(videoUrlData.getvUrl())
+//                }
+//            }
+//        }
+//        //4对对象进行去重操作
+//        val set = LinkedHashSet<VideoBean>()
+//        val list = ArrayList<VideoBean>()
+//        set.addAll(listOne)
+//        list.addAll(set)
+//        val iterator = list.iterator()
+//        while (iterator.hasNext()) {
+//            val item = iterator.next()
+//            if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
+//                iterator.remove()
+//            }
+//        }
+//        //5把去重复的数据保存到文件中
+//        println("去重复后: " + list.size)
+////        KtStringUtil.saveAsFileWriter("/home/ccg/buzz1.json", GsonBuilder().create().toJson(list))
+//        KtStringUtil.saveAsFileWriter("E:\\buzz1.json", GsonBuilder().create().toJson(list))
+//        val endTime = System.currentTimeMillis()
+//        println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
     }
 
 
