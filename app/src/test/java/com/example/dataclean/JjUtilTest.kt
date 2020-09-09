@@ -9,38 +9,41 @@ import com.google.gson.reflect.TypeToken
 import org.junit.Test
 
 /**
- * @author : C4_疫染黎明
- * 描述 :jj的数据清洗工具类
+ * @author : C4_雍和
+ * 描述 :
  * 主要功能 :
- * 维护人员 : C4_疫染黎明
- * date : 20-1-2 上午10:51
+ * 维护人员 : C4_雍和
+ * date : 2020/9/7 11:46
  */
-class KtStringUtilTest {
+class JjUtilTest {
     /**
      * A完整数据并去重复
      */
     @Test
     fun cleaningData() {
+        val startTime = System.currentTimeMillis()
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("E:\\jj.json")
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/jj.json")
+        val fileStr = KtStringUtil.getStrInFile("E:\\jj.json")
+//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/jj.json")
         //2把json转换成list
         val listDatas = GsonBuilder().create()
             .fromJson<List<VideoBean>>(fileStr, object : TypeToken<List<VideoBean>>() {}.type)
         println("一共: " + listDatas.size)
         //3把不完整的数据填写完整
-        for ((aa, av) in listDatas.withIndex()) {
-            for ((bb, bv) in listDatas.withIndex()) {
-                if (av.id != bv.id
-                    && av.name == bv.name
-                    && av.getpUrl().isNullOrEmpty()
-                    && av.getvUrl().isNotEmpty()
-                    && bv.getvUrl().isNullOrEmpty()
-                    && bv.getpUrl().isNotEmpty()
+        for (videoUrlData in listDatas) {
+            for (pictureUrlData in listDatas) {
+                if (videoUrlData.id != pictureUrlData.id
+                    && videoUrlData.name == pictureUrlData.name
+                    && videoUrlData.getpUrl().isNullOrEmpty()
+                    && videoUrlData.getvUrl().isNotEmpty()
+                    && pictureUrlData.getvUrl().isNullOrEmpty()
+                    && pictureUrlData.getpUrl().isNotEmpty()
                 ) {
-                    av.setpUrl(bv.getpUrl())
-                    av.tags = bv.tags
-                    bv.setvUrl(av.getvUrl())
+                    println(videoUrlData.getvUrl())
+                    videoUrlData.name = pictureUrlData.name
+                    videoUrlData.setpUrl(pictureUrlData.getpUrl())
+                    pictureUrlData.tags = videoUrlData.tags
+                    pictureUrlData.setvUrl(videoUrlData.getvUrl())
                 }
             }
         }
@@ -58,8 +61,10 @@ class KtStringUtilTest {
         }
         //5把去重复的数据保存到文件中
         println("去重复后: " + list.size)
-//        KtStringUtil.saveAsFileWriter("E:\\jj1.json", GsonBuilder().create().toJson(list))
-        KtStringUtil.saveAsFileWriter("/home/ccg/jj1.json", GsonBuilder().create().toJson(list))
+        KtStringUtil.saveAsFileWriter("E:\\jj1.json", GsonBuilder().create().toJson(list))
+//        KtStringUtil.saveAsFileWriter("/home/ccg/jj1.json", GsonBuilder().create().toJson(list))
+        val endTime = System.currentTimeMillis()
+        println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
     }
 
     /**

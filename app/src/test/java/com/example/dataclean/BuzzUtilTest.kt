@@ -11,7 +11,7 @@ import org.junit.Test
 /**
  * @author : C4_雍和
  * 描述 :SistersUtilTest
- * 主要功能 :
+ * 主要功能 :DmUtilTest
  * 维护人员 : C4_雍和
  * date : 20-6-12 上午9:11
  */
@@ -21,32 +21,39 @@ class BuzzUtilTest {
      */
     @Test
     fun cleaningData() {
+        val startTime = System.currentTimeMillis()
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
+//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
+        val fileStr = KtStringUtil.getStrInFile("E:\\buzz.json")
         //2把json转换成list
         val listDatas = GsonBuilder().create()
             .fromJson<List<VideoBean>>(fileStr, object : TypeToken<List<VideoBean>>() {}.type)
-        println("一共: " + listDatas.size)
+        println("原始数据一共: " + listDatas.size)
+        val setOne = LinkedHashSet<VideoBean>()
+        val listOne = ArrayList<VideoBean>()
+        setOne.addAll(listDatas)
+        listOne.addAll(setOne)
+        println("原始数据去重后一共: " + listOne.size)
         //3把不完整的数据填写完整
-        for ((aa, av) in listDatas.withIndex()) {
-            for ((bb, bv) in listDatas.withIndex()) {
-                if (av.id != bv.id
-                    && av.name == bv.name
-                    && av.getpUrl().isNullOrEmpty()
-                    && av.getvUrl().isNotEmpty()
-                    && bv.getvUrl().isNullOrEmpty()
-                    && bv.getpUrl().isNotEmpty()
+        for (videoUrlData in listOne) {
+            for (pictureUrlData in listOne) {
+                if (videoUrlData.id != pictureUrlData.id
+                    && videoUrlData.name == pictureUrlData.name
+                    && videoUrlData.getpUrl().isNullOrEmpty()
+                    && videoUrlData.getvUrl().isNotEmpty()
+                    && pictureUrlData.getvUrl().isNullOrEmpty()
+                    && pictureUrlData.getpUrl().isNotEmpty()
                 ) {
-                    av.setpUrl(bv.getpUrl())
-                    av.tags = bv.tags
-                    bv.setvUrl(av.getvUrl())
+                    videoUrlData.setpUrl(pictureUrlData.getpUrl())
+                    videoUrlData.tags = pictureUrlData.tags
+                    pictureUrlData.setvUrl(videoUrlData.getvUrl())
                 }
             }
         }
         //4对对象进行去重操作
         val set = LinkedHashSet<VideoBean>()
         val list = ArrayList<VideoBean>()
-        set.addAll(listDatas)
+        set.addAll(listOne)
         list.addAll(set)
         val iterator = list.iterator()
         while (iterator.hasNext()) {
@@ -57,7 +64,10 @@ class BuzzUtilTest {
         }
         //5把去重复的数据保存到文件中
         println("去重复后: " + list.size)
-        KtStringUtil.saveAsFileWriter("/home/ccg/buzz1.json", GsonBuilder().create().toJson(list))
+//        KtStringUtil.saveAsFileWriter("/home/ccg/buzz1.json", GsonBuilder().create().toJson(list))
+        KtStringUtil.saveAsFileWriter("E:\\buzz1.json", GsonBuilder().create().toJson(list))
+        val endTime = System.currentTimeMillis()
+        println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
     }
 
 
