@@ -26,48 +26,64 @@ class BuzzUtilTest {
 //        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
         val fileStr = KtStringUtil.getStrInFile("E:\\buzz.json")
         //2把json转换成list
-        val listDatas = GsonBuilder().create()
-            .fromJson<List<VideoBean>>(fileStr, object : TypeToken<List<VideoBean>>() {}.type)
+        val listDatas = GsonBuilder().create().fromJson<ArrayList<VideoBean>>(
+            fileStr,
+            object : TypeToken<ArrayList<VideoBean>>() {}.type
+        )
         println("原始数据一共: " + listDatas.size)
+        //3原始数据去重复
         val setOne = LinkedHashSet<VideoBean>()
         val listOne = ArrayList<VideoBean>()
         setOne.addAll(listDatas)
         listOne.addAll(setOne)
+        listDatas.clear()
         println("原始数据去重后一共: " + listOne.size)
-//        //3把不完整的数据填写完整
-//        for (videoUrlData in listOne) {
-//            for (pictureUrlData in listOne) {
-//                if (videoUrlData.id != pictureUrlData.id
-//                    && videoUrlData.name == pictureUrlData.name
-//                    && videoUrlData.getpUrl().isNullOrEmpty()
-//                    && videoUrlData.getvUrl().isNotEmpty()
-//                    && pictureUrlData.getvUrl().isNullOrEmpty()
-//                    && pictureUrlData.getpUrl().isNotEmpty()
-//                ) {
-//                    videoUrlData.setpUrl(pictureUrlData.getpUrl())
-//                    videoUrlData.tags = pictureUrlData.tags
-//                    pictureUrlData.setvUrl(videoUrlData.getvUrl())
-//                }
-//            }
-//        }
-//        //4对对象进行去重操作
-//        val set = LinkedHashSet<VideoBean>()
-//        val list = ArrayList<VideoBean>()
-//        set.addAll(listOne)
-//        list.addAll(set)
-//        val iterator = list.iterator()
-//        while (iterator.hasNext()) {
-//            val item = iterator.next()
-//            if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
-//                iterator.remove()
-//            }
-//        }
-//        //5把去重复的数据保存到文件中
-//        println("去重复后: " + list.size)
-////        KtStringUtil.saveAsFileWriter("/home/ccg/buzz1.json", GsonBuilder().create().toJson(list))
-//        KtStringUtil.saveAsFileWriter("E:\\buzz1.json", GsonBuilder().create().toJson(list))
-//        val endTime = System.currentTimeMillis()
-//        println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
+        //4对数据进行分组，一组视频地址，一组缩略图
+        val listTwo = ArrayList<VideoBean>()
+        val listThree = ArrayList<VideoBean>()
+        for (videoUrlData in listOne) {
+            if (videoUrlData.getvUrl().isNotEmpty()) {
+                listTwo.add(videoUrlData)
+            }else if(videoUrlData.getpUrl().isNotEmpty()){
+                listThree.add(videoUrlData)
+            }
+        }
+        listOne.clear()
+        println("视频地址一共: " + listTwo.size)
+        //5把缩略图合并到视频地址中
+        for (index in listTwo.indices) {
+            for (pictureUrlData in listThree) {
+                if (listTwo[index].id != pictureUrlData.id && listTwo[index].name == pictureUrlData.name) {
+                    listTwo[index].setpUrl(pictureUrlData.getpUrl())
+                    listTwo[index].tags = pictureUrlData.tags
+                    continue
+                }
+            }
+            if (index % 10000 == 0) {
+                println("当前遍历到第: $index")
+            }
+        }
+        listThree.clear()
+        //6对完整的数据进行去重操作
+        val set = LinkedHashSet<VideoBean>()
+        val list = ArrayList<VideoBean>()
+        set.addAll(listTwo)
+        list.addAll(set)
+        listTwo.clear()
+        //7去掉不完整的数据
+        val iterator = list.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
+                iterator.remove()
+            }
+        }
+        //8把去重复的数据保存到文件中
+        println("去重复后: " + list.size)
+//        KtStringUtil.saveAsFileWriter("/home/ccg/buzz1.json", GsonBuilder().create().toJson(list))
+        KtStringUtil.saveAsFileWriter("E:\\buzz1.json", GsonBuilder().create().toJson(list))
+        val endTime = System.currentTimeMillis()
+        println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
     }
 
 
@@ -77,8 +93,10 @@ class BuzzUtilTest {
     @Test
     fun cleaningDataTwo() {
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz1.json")
-        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/buzzText.json")
+//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz1.json")
+        val fileStr = KtStringUtil.getStrInFile("E:\\buzz1.json")
+//        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/buzzText.json")
+        val fileStrTwo = KtStringUtil.getStrInFile("E:\\buzzText.json")
 //        //2把json转换成list
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
@@ -87,10 +105,10 @@ class BuzzUtilTest {
             )
         val listDatasTwo = GsonBuilder().create()
             .fromJson<List<VideoInfo>>(fileStrTwo, object : TypeToken<List<VideoInfo>>() {}.type)
-        for ((aa, av) in listDatasOne.withIndex()) {
-            for ((bb, bv) in listDatasTwo.withIndex()) {
-                if (av.getvUrl() == bv.getvUrl()) {
-                    av.i = "1"
+        for (videoUrlData in listDatasOne) {
+            for (pictureUrlData in listDatasTwo) {
+                if (videoUrlData.getvUrl() == pictureUrlData.getvUrl()) {
+                    videoUrlData.i = "1"
                 }
             }
         }
@@ -102,45 +120,9 @@ class BuzzUtilTest {
             }
         }
         println("最终的: " + listDatasOne.size)
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/buzzok.json",
-            GsonBuilder().create().toJson(listDatasOne)
-        )
+//        KtStringUtil.saveAsFileWriter("/home/ccg/buzzok.json", GsonBuilder().create().toJson(listDatasOne))
+        KtStringUtil.saveAsFileWriter("E:\\buzzok.json", GsonBuilder().create().toJson(listDatasOne))
     }
-
-
-
-
-    /**
-     * B1把不能播放的数据删除并把最终结果保存到本地
-     */
-    @Test
-    fun cleaningDataFive() {
-        //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.txt")
-//        //2把json转换成list
-        val listDatasOne = GsonBuilder().create()
-            .fromJson<ArrayList<VideoBean>>(
-                fileStr,
-                object : TypeToken<ArrayList<VideoBean>>() {}.type
-            )
-        println("刚开始的: " + listDatasOne.size)
-        val it = listDatasOne.iterator()
-        while (it.hasNext()) {
-            val item = it.next()
-            if (item.i != "1") {
-                it.remove()
-            }
-        }
-        println("最终的: " + listDatasOne.size)
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/buzzok.json",
-            GsonBuilder().create().toJson(listDatasOne)
-        )
-    }
-
-
-
 
     /**
      * B2把最终结果分解成几份
@@ -148,54 +130,95 @@ class BuzzUtilTest {
     @Test
     fun cleaningDataThree() {
         //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzzok.json")
-        val listDatasOne = GsonBuilder().create()
-            .fromJson<ArrayList<VideoBean>>(
-                fileStr,
-                object : TypeToken<ArrayList<VideoBean>>() {}.type
-            )
-        val zongList = KtStringUtil.averageAssign(listDatasOne, 3)
-        val aa = FinalVideoBean()
-        aa.timeStamp = System.currentTimeMillis()
-        aa.data = zongList!![0]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/buzz1.json",
-            GsonBuilder().create().toJson(aa)
+//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzzok.json")
+        val fileStr = KtStringUtil.getStrInFile("E:\\buzzok.json")
+        val listDatasOne = GsonBuilder().create().fromJson<ArrayList<VideoBean>>(
+            fileStr,
+            object : TypeToken<ArrayList<VideoBean>>() {}.type
         )
-        val bb = FinalVideoBean()
-        bb.timeStamp = System.currentTimeMillis()
-        bb.data = zongList[1]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/buzz2.json",
-            GsonBuilder().create().toJson(bb)
-        )
-        val cc = FinalVideoBean()
-        cc.timeStamp = System.currentTimeMillis()
-        cc.data = zongList[2]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/buzz3.json",
-            GsonBuilder().create().toJson(cc)
-        )
+        val videoTag: MutableList<String> = ArrayList()
+        val videoUrl: MutableList<String> = ArrayList()
+        for (i in listDatasOne) {
+            if (!videoTag.contains(i.tags)) {
+                videoTag.add(i.tags)
+            }
+        }
+        for (i in videoTag.indices) {
+            val tempList: MutableList<VideoBean> = ArrayList()
+            for (j in listDatasOne) {
+                if (videoTag[i] == j.tags) {
+                    tempList.add(j)
+                }
+            }
+            val ssss = VideoListBean()
+            ssss.videoTag = videoTag[i]
+            ssss.data = tempList
+//            val videoU = "/home/ccg/$i.json"
+            val videoU = "E:\\新建文件夹\\$i.json"
+            KtStringUtil.saveAsFileWriter(videoU, GsonBuilder().create().toJson(ssss))
+            videoUrl.add("https://siyou.nos-eastchina1.126.net/21/buzz/$i.json")
+        }
+        val secon = SecondListBean()
+        secon.videoTag = videoTag
+        secon.videoUrl = videoUrl
+//        KtStringUtil.saveAsFileWriter("/home/ccg/index.json", GsonBuilder().create().toJson(secon))
+        KtStringUtil.saveAsFileWriter("E:\\新建文件夹\\index.json", GsonBuilder().create().toJson(secon))
     }
 
-    /**
-     * B2把最终结果分解成几份
-     */
-    @Test
-    fun cleaningDataFour() {
-        //1加载json文件到内存中
-        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
-        val listDatasOne = GsonBuilder().create()
-            .fromJson<ArrayList<VideoBean>>(
-                fileStr,
-                object : TypeToken<ArrayList<VideoBean>>() {}.type
-            )
-        val zongList = KtStringUtil.averageAssign(listDatasOne, 10)
-        for ((index, e) in zongList!!.withIndex()) {
-            KtStringUtil.saveAsFileWriter(
-                "/home/ccg/buzz$index.txt",
-                GsonBuilder().create().toJson(e)
-            )
-        }
-    }
+//    /**
+//     * B2把最终结果分解成几份
+//     */
+//    @Test
+//    fun cleaningDataThree() {
+//        //1加载json文件到内存中
+//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzzok.json")
+//        val listDatasOne = GsonBuilder().create()
+//            .fromJson<ArrayList<VideoBean>>(
+//                fileStr,
+//                object : TypeToken<ArrayList<VideoBean>>() {}.type
+//            )
+//        val zongList = KtStringUtil.averageAssign(listDatasOne, 3)
+//        val aa = FinalVideoBean()
+//        aa.timeStamp = System.currentTimeMillis()
+//        aa.data = zongList!![0]
+//        KtStringUtil.saveAsFileWriter(
+//            "/home/ccg/buzz1.json",
+//            GsonBuilder().create().toJson(aa)
+//        )
+//        val bb = FinalVideoBean()
+//        bb.timeStamp = System.currentTimeMillis()
+//        bb.data = zongList[1]
+//        KtStringUtil.saveAsFileWriter(
+//            "/home/ccg/buzz2.json",
+//            GsonBuilder().create().toJson(bb)
+//        )
+//        val cc = FinalVideoBean()
+//        cc.timeStamp = System.currentTimeMillis()
+//        cc.data = zongList[2]
+//        KtStringUtil.saveAsFileWriter(
+//            "/home/ccg/buzz3.json",
+//            GsonBuilder().create().toJson(cc)
+//        )
+//    }
+//
+//    /**
+//     * B2把最终结果分解成几份
+//     */
+//    @Test
+//    fun cleaningDataFour() {
+//        //1加载json文件到内存中
+//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
+//        val listDatasOne = GsonBuilder().create()
+//            .fromJson<ArrayList<VideoBean>>(
+//                fileStr,
+//                object : TypeToken<ArrayList<VideoBean>>() {}.type
+//            )
+//        val zongList = KtStringUtil.averageAssign(listDatasOne, 10)
+//        for ((index, e) in zongList!!.withIndex()) {
+//            KtStringUtil.saveAsFileWriter(
+//                "/home/ccg/buzz$index.txt",
+//                GsonBuilder().create().toJson(e)
+//            )
+//        }
+//    }
 }
