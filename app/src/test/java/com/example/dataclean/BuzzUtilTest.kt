@@ -1,6 +1,5 @@
 package com.example.dataclean
 
-import com.example.dataclean.entity.FinalVideoBean
 import com.example.dataclean.entity.VideoBean
 import com.example.dataclean.entity.VideoInfo
 import com.example.dataclean.util.KtStringUtil
@@ -39,23 +38,23 @@ class BuzzUtilTest {
         listDatas.clear()
         println("原始数据去重后一共: " + listOne.size)
         //4对数据进行分组，一组视频地址，一组缩略图
-        val listTwo = ArrayList<VideoBean>()
+        val listVideo = ArrayList<VideoBean>()
         val listThree = ArrayList<VideoBean>()
         for (videoUrlData in listOne) {
             if (videoUrlData.getvUrl().isNotEmpty()) {
-                listTwo.add(videoUrlData)
+                listVideo.add(videoUrlData)
             }else if(videoUrlData.getpUrl().isNotEmpty()){
                 listThree.add(videoUrlData)
             }
         }
         listOne.clear()
-        println("视频地址一共: " + listTwo.size)
+        println("视频地址一共: " + listVideo.size)
         //5把缩略图合并到视频地址中
-        for (index in listTwo.indices) {
+        for (index in listVideo.indices) {
             for (pictureUrlData in listThree) {
-                if (listTwo[index].id != pictureUrlData.id && listTwo[index].name == pictureUrlData.name) {
-                    listTwo[index].setpUrl(pictureUrlData.getpUrl())
-                    listTwo[index].tags = pictureUrlData.tags
+                if (listVideo[index].id != pictureUrlData.id && listVideo[index].name == pictureUrlData.name) {
+                    listVideo[index].setpUrl(pictureUrlData.getpUrl())
+                    listVideo[index].tags = pictureUrlData.tags
                     continue
                 }
             }
@@ -67,9 +66,9 @@ class BuzzUtilTest {
         //6对完整的数据进行去重操作
         val set = LinkedHashSet<VideoBean>()
         val list = ArrayList<VideoBean>()
-        set.addAll(listTwo)
+        set.addAll(listVideo)
         list.addAll(set)
-        listTwo.clear()
+        listVideo.clear()
         //7去掉不完整的数据
         val iterator = list.iterator()
         while (iterator.hasNext()) {
@@ -165,60 +164,4 @@ class BuzzUtilTest {
         KtStringUtil.saveAsFileWriter("E:\\新建文件夹\\index.json", GsonBuilder().create().toJson(secon))
     }
 
-//    /**
-//     * B2把最终结果分解成几份
-//     */
-//    @Test
-//    fun cleaningDataThree() {
-//        //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzzok.json")
-//        val listDatasOne = GsonBuilder().create()
-//            .fromJson<ArrayList<VideoBean>>(
-//                fileStr,
-//                object : TypeToken<ArrayList<VideoBean>>() {}.type
-//            )
-//        val zongList = KtStringUtil.averageAssign(listDatasOne, 3)
-//        val aa = FinalVideoBean()
-//        aa.timeStamp = System.currentTimeMillis()
-//        aa.data = zongList!![0]
-//        KtStringUtil.saveAsFileWriter(
-//            "/home/ccg/buzz1.json",
-//            GsonBuilder().create().toJson(aa)
-//        )
-//        val bb = FinalVideoBean()
-//        bb.timeStamp = System.currentTimeMillis()
-//        bb.data = zongList[1]
-//        KtStringUtil.saveAsFileWriter(
-//            "/home/ccg/buzz2.json",
-//            GsonBuilder().create().toJson(bb)
-//        )
-//        val cc = FinalVideoBean()
-//        cc.timeStamp = System.currentTimeMillis()
-//        cc.data = zongList[2]
-//        KtStringUtil.saveAsFileWriter(
-//            "/home/ccg/buzz3.json",
-//            GsonBuilder().create().toJson(cc)
-//        )
-//    }
-//
-//    /**
-//     * B2把最终结果分解成几份
-//     */
-//    @Test
-//    fun cleaningDataFour() {
-//        //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz.json")
-//        val listDatasOne = GsonBuilder().create()
-//            .fromJson<ArrayList<VideoBean>>(
-//                fileStr,
-//                object : TypeToken<ArrayList<VideoBean>>() {}.type
-//            )
-//        val zongList = KtStringUtil.averageAssign(listDatasOne, 10)
-//        for ((index, e) in zongList!!.withIndex()) {
-//            KtStringUtil.saveAsFileWriter(
-//                "/home/ccg/buzz$index.txt",
-//                GsonBuilder().create().toJson(e)
-//            )
-//        }
-//    }
 }
