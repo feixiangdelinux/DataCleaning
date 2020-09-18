@@ -92,10 +92,10 @@ class JjUtilTest {
     @Test
     fun cleaningDataTwo() {
         //1加载json文件到内存中
-//        val fileStr = KtStringUtil.getStrInFile("/home/ccg/buzz1.json")
-        val fileStr = KtStringUtil.getStrInFile("E:\\buzz1.json")
-//        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/buzzText.json")
-        val fileStrTwo = KtStringUtil.getStrInFile("E:\\buzzText.json")
+        val fileStr = KtStringUtil.getStrInFile("/home/ccg/jj1.json")
+//        val fileStr = KtStringUtil.getStrInFile("E:\\jj1.json")
+        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/jjText.json")
+//        val fileStrTwo = KtStringUtil.getStrInFile("E:\\jjText.json")
 //        //2把json转换成list
         val listDatasOne = GsonBuilder().create()
             .fromJson<ArrayList<VideoBean>>(
@@ -119,8 +119,8 @@ class JjUtilTest {
             }
         }
         println("最终的: " + listDatasOne.size)
-//        KtStringUtil.saveAsFileWriter("/home/ccg/buzzok.json", GsonBuilder().create().toJson(listDatasOne))
-        KtStringUtil.saveAsFileWriter("E:\\buzzok.json", GsonBuilder().create().toJson(listDatasOne))
+        KtStringUtil.saveAsFileWriter("/home/ccg/jjok.json", GsonBuilder().create().toJson(listDatasOne))
+//        KtStringUtil.saveAsFileWriter("E:\\jjok.json", GsonBuilder().create().toJson(listDatasOne))
     }
 
     /**
@@ -130,32 +130,37 @@ class JjUtilTest {
     fun cleaningDataThree() {
         //1加载json文件到内存中
         val fileStr = KtStringUtil.getStrInFile("/home/ccg/jjok.json")
-        val listDatasOne = GsonBuilder().create()
-            .fromJson<ArrayList<VideoBean>>(
-                fileStr,
-                object : TypeToken<ArrayList<VideoBean>>() {}.type
-            )
-        val zongList = KtStringUtil.averageAssign(listDatasOne, 3)
-        val aa = FinalVideoBean()
-        aa.timeStamp = System.currentTimeMillis()
-        aa.data = zongList!![0]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/jjok1.json",
-            GsonBuilder().create().toJson(aa)
+//        val fileStr = KtStringUtil.getStrInFile("E:\\jjok.json")
+        val listDatasOne = GsonBuilder().create().fromJson<ArrayList<VideoBean>>(
+            fileStr,
+            object : TypeToken<ArrayList<VideoBean>>() {}.type
         )
-        val bb = FinalVideoBean()
-        bb.timeStamp = System.currentTimeMillis()
-        bb.data = zongList[1]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/jjok2.json",
-            GsonBuilder().create().toJson(bb)
-        )
-        val cc = FinalVideoBean()
-        cc.timeStamp = System.currentTimeMillis()
-        cc.data = zongList[2]
-        KtStringUtil.saveAsFileWriter(
-            "/home/ccg/jjok3.json",
-            GsonBuilder().create().toJson(cc)
-        )
+        val videoTag: MutableList<String> = ArrayList()
+        val videoUrl: MutableList<String> = ArrayList()
+        for (i in listDatasOne) {
+            if (!videoTag.contains(i.tags)) {
+                videoTag.add(i.tags)
+            }
+        }
+        for (i in videoTag.indices) {
+            val tempList: MutableList<VideoBean> = ArrayList()
+            for (j in listDatasOne) {
+                if (videoTag[i] == j.tags) {
+                    tempList.add(j)
+                }
+            }
+            val ssss = VideoListBean()
+            ssss.videoTag = videoTag[i]
+            ssss.data = tempList
+            val videoU = "/home/ccg/$i.json"
+//            val videoU = "E:\\新建文件夹\\$i.json"
+            KtStringUtil.saveAsFileWriter(videoU, GsonBuilder().create().toJson(ssss))
+            videoUrl.add("https://siyou.nos-eastchina1.126.net/21/jj/$i.json")
+        }
+        val secon = SecondListBean()
+        secon.videoTag = videoTag
+        secon.videoUrl = videoUrl
+        KtStringUtil.saveAsFileWriter("/home/ccg/index.json", GsonBuilder().create().toJson(secon))
+//        KtStringUtil.saveAsFileWriter("E:\\新建文件夹\\index.json", GsonBuilder().create().toJson(secon))
     }
 }
