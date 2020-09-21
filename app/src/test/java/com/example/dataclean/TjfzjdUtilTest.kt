@@ -52,7 +52,7 @@ class TjfzjdUtilTest {
         //5把缩略图合并到视频地址中
         for (index in listVideo.indices) {
             for (pictureUrlData in listThree) {
-                if (listVideo[index].id != pictureUrlData.id && listVideo[index].name == pictureUrlData.name) {
+                if (listVideo[index].id != pictureUrlData.id && listVideo[index].url == pictureUrlData.url) {
                     listVideo[index].setpUrl(pictureUrlData.getpUrl())
                     listVideo[index].tags = pictureUrlData.tags
                     listVideo[index].name = pictureUrlData.name
