@@ -24,7 +24,7 @@ class OumeidUtilTest {
         //1加载json文件到内存中
         val fileStr = KtStringUtil.getStrInFile("/home/ccg/oumeid.json")
 //        val fileStr = KtStringUtil.getStrInFile("E:\\oumeid.json")
-        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/oumeidtext.json")
+        val fileStrTwo = KtStringUtil.getStrInFile("/home/ccg/oumeidText.json")
 //        val fileStrTwo = KtStringUtil.getStrInFile("E:\\oumeidtext.json")
 //        //2把json转换成list
         val listDatasOne = GsonBuilder().create()
