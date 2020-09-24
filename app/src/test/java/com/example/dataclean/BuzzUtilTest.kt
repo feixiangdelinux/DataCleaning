@@ -13,6 +13,7 @@ import org.junit.Test
  * 主要功能 :DmUtilTest
  * 维护人员 : C4_雍和
  * date : 20-6-12 上午9:11
+ * AcbUtilTest
  */
 class BuzzUtilTest {
     /**
@@ -43,7 +44,7 @@ class BuzzUtilTest {
         for (videoUrlData in listOne) {
             if (videoUrlData.getvUrl().isNotEmpty()) {
                 listVideo.add(videoUrlData)
-            }else if(videoUrlData.getpUrl().isNotEmpty()){
+            } else if (videoUrlData.getpUrl().isNotEmpty()) {
                 listThree.add(videoUrlData)
             }
         }
@@ -120,7 +121,10 @@ class BuzzUtilTest {
         }
         println("最终的: " + listDatasOne.size)
 //        KtStringUtil.saveAsFileWriter("/home/ccg/buzzok.json", GsonBuilder().create().toJson(listDatasOne))
-        KtStringUtil.saveAsFileWriter("E:\\buzzok.json", GsonBuilder().create().toJson(listDatasOne))
+        KtStringUtil.saveAsFileWriter(
+            "E:\\buzzok.json",
+            GsonBuilder().create().toJson(listDatasOne)
+        )
     }
 
     /**
