@@ -9,14 +9,15 @@ import org.junit.Test
 
 /**
  * @author : C4_雍和
- * 描述 :BaihuzuUtilTest
- * 主要功能 :baihuzu
+ * 描述 :
+ * 主要功能 :
  * 维护人员 : C4_雍和
- * date : 20-9-24 下午3:43
+ * date : 2020/9/25 11:34
  */
-class AcbUtilTest {
-    val name = "acb"
+class AqdtvUtilTest {
+    val name = "aqdtv"
     val isLinux = false
+
     /**
      * A完整数据并去重复/home/ccg
      */

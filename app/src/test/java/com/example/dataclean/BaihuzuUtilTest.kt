@@ -9,13 +9,13 @@ import org.junit.Test
 
 /**
  * @author : C4_雍和
- * 描述 :BaihuzuUtilTest
- * 主要功能 :baihuzu
+ * 描述 :
+ * 主要功能 :
  * 维护人员 : C4_雍和
- * date : 20-9-24 下午3:43
+ * date : 2020/9/25 13:46
  */
-class AcbUtilTest {
-    val name = "acb"
+class BaihuzuUtilTest {
+    val name = "baihuzu"
     val isLinux = false
     /**
      * A完整数据并去重复/home/ccg
@@ -42,15 +42,60 @@ class AcbUtilTest {
         listOne.addAll(setOne)
         listDatas.clear()
         println("原始数据去重后一共: " + listOne.size)
+        //4对数据进行分组，一组视频地址，一组缩略图
+        val listVideo = ArrayList<VideoBean>()
+        val listThree = ArrayList<VideoBean>()
+        for (videoUrlData in listOne) {
+            if (videoUrlData.getvUrl().isNotEmpty()) {
+                listVideo.add(videoUrlData)
+            } else if (videoUrlData.getpUrl().isNotEmpty()) {
+                listThree.add(videoUrlData)
+            }
+        }
+        listOne.clear()
+        println("视频地址一共: " + listVideo.size)
+        //5把缩略图合并到视频地址中
+        for (index in listVideo.indices) {
+            for (pictureUrlData in listThree) {
+                if (listVideo[index].id != pictureUrlData.id && listVideo[index].url == pictureUrlData.url) {
+                    listVideo[index].name = pictureUrlData.name
+                    listVideo[index].tags = pictureUrlData.tags
+                    listVideo[index].setpUrl(pictureUrlData.getpUrl())
+                    continue
+                }
+            }
+            if (index % 10000 == 0) {
+                println("当前遍历到第: $index")
+            }
+        }
+        listThree.clear()
+        //6对完整的数据进行去重操作
+        val set = LinkedHashSet<VideoBean>()
+        val list = ArrayList<VideoBean>()
+        set.addAll(listVideo)
+        list.addAll(set)
+        listVideo.clear()
+        //7去掉不完整的数据
+        val iterator = list.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
+                iterator.remove()
+            }
+        }
+        //8把去重复的数据保存到文件中
+        println("去重复后: " + list.size)
+
+
         if (isLinux) {
             KtStringUtil.saveAsFileWriter(
                 "/home/ccg/" + name + "1.json",
-                GsonBuilder().create().toJson(listOne)
+                GsonBuilder().create().toJson(list)
             )
         } else {
             KtStringUtil.saveAsFileWriter(
                 "E:\\" + name + "1.json",
-                GsonBuilder().create().toJson(listOne)
+                GsonBuilder().create().toJson(list)
             )
         }
         val endTime = System.currentTimeMillis()
