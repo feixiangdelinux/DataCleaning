@@ -16,14 +16,14 @@ import org.junit.Test
  */
 class AAAUtilTest {
     //    val name = "baihuzu"
-    val name = "gb"
-//    val name = "hu"
+//    val name = "gb"
+    val name = "hu"
 
 
     val isLinux = true
 
     fun getVideoType(name: String): Int {
-        return if ("baihuzu" == name) {
+        return if ("baihuzu" == name || "hu" == name) {
             //url   vurl
             1
         } else {
@@ -58,8 +58,8 @@ class AAAUtilTest {
         listOne.addAll(setOne)
         listDatas.clear()
         println("原始数据去重后一共: " + listOne.size)
-        val lexing=getVideoType(name)
-        if(lexing==-1){
+        val lexing = getVideoType(name)
+        if (lexing == -1) {
             //7去掉不完整的数据
             val iterator = listOne.iterator()
             while (iterator.hasNext()) {
@@ -71,13 +71,19 @@ class AAAUtilTest {
             //8把去重复的数据保存到文件中
             println("去重复后: " + listOne.size)
             if (isLinux) {
-                KtStringUtil.saveAsFileWriter("/home/ccg/" + name + "1.json", GsonBuilder().create().toJson(listOne))
+                KtStringUtil.saveAsFileWriter(
+                    "/home/ccg/" + name + "1.json",
+                    GsonBuilder().create().toJson(listOne)
+                )
             } else {
-                KtStringUtil.saveAsFileWriter("E:\\" + name + "1.json", GsonBuilder().create().toJson(listOne))
+                KtStringUtil.saveAsFileWriter(
+                    "E:\\" + name + "1.json",
+                    GsonBuilder().create().toJson(listOne)
+                )
             }
             val endTime = System.currentTimeMillis()
             println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
-        }else{
+        } else {
             //4对数据进行分组，一组视频地址，一组缩略图
             val listVideo = ArrayList<VideoBean>()
             val listThree = ArrayList<VideoBean>()
@@ -94,7 +100,7 @@ class AAAUtilTest {
             for (index in listVideo.indices) {
                 for (pictureUrlData in listThree) {
                     if (lexing == 1) {
-                        if (listVideo[index].id != pictureUrlData.id && listVideo[index].url == pictureUrlData.url) {
+                        if (listVideo[index].url == pictureUrlData.url) {
                             listVideo[index].name = pictureUrlData.name
                             listVideo[index].tags = pictureUrlData.tags
                             listVideo[index].setpUrl(pictureUrlData.getpUrl())
@@ -124,9 +130,15 @@ class AAAUtilTest {
             //8把去重复的数据保存到文件中
             println("去重复后: " + list.size)
             if (isLinux) {
-                KtStringUtil.saveAsFileWriter("/home/ccg/" + name + "1.json", GsonBuilder().create().toJson(list))
+                KtStringUtil.saveAsFileWriter(
+                    "/home/ccg/" + name + "1.json",
+                    GsonBuilder().create().toJson(list)
+                )
             } else {
-                KtStringUtil.saveAsFileWriter("E:\\" + name + "1.json", GsonBuilder().create().toJson(list))
+                KtStringUtil.saveAsFileWriter(
+                    "E:\\" + name + "1.json",
+                    GsonBuilder().create().toJson(list)
+                )
             }
             val endTime = System.currentTimeMillis()
             println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
