@@ -16,8 +16,8 @@ import org.junit.Test
  */
 class AAAUtilTest {
     //    val name = "baihuzu"
-//    val name = "gb"
-    val name = "hu"
+    val name = "gb"
+//    val name = "hu"
 
 
     val isLinux = true
