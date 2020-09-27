@@ -14,9 +14,25 @@ import org.junit.Test
  * 维护人员 : C4_雍和
  * date : 2020/9/25 13:46
  */
-class BaihuzuUtilTest {
-    val name = "baihuzu"
-    val isLinux = false
+class AAAUtilTest {
+    //    val name = "baihuzu"
+//    val name = "gb"
+    val name = "hu"
+
+
+    val isLinux = true
+
+    fun getVideoType(name: String): Int {
+        return if ("baihuzu" == name) {
+            //url   vurl
+            1
+        } else {
+            //不需要合并的
+            -1
+        }
+    }
+
+
     /**
      * A完整数据并去重复/home/ccg
      */
@@ -42,64 +58,80 @@ class BaihuzuUtilTest {
         listOne.addAll(setOne)
         listDatas.clear()
         println("原始数据去重后一共: " + listOne.size)
-        //4对数据进行分组，一组视频地址，一组缩略图
-        val listVideo = ArrayList<VideoBean>()
-        val listThree = ArrayList<VideoBean>()
-        for (videoUrlData in listOne) {
-            if (videoUrlData.getvUrl().isNotEmpty()) {
-                listVideo.add(videoUrlData)
-            } else if (videoUrlData.getpUrl().isNotEmpty()) {
-                listThree.add(videoUrlData)
-            }
-        }
-        listOne.clear()
-        println("视频地址一共: " + listVideo.size)
-        //5把缩略图合并到视频地址中
-        for (index in listVideo.indices) {
-            for (pictureUrlData in listThree) {
-                if (listVideo[index].id != pictureUrlData.id && listVideo[index].url == pictureUrlData.url) {
-                    listVideo[index].name = pictureUrlData.name
-                    listVideo[index].tags = pictureUrlData.tags
-                    listVideo[index].setpUrl(pictureUrlData.getpUrl())
-                    continue
+        val lexing=getVideoType(name)
+        if(lexing==-1){
+            //7去掉不完整的数据
+            val iterator = listOne.iterator()
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
+                    iterator.remove()
                 }
             }
-            if (index % 10000 == 0) {
-                println("当前遍历到第: $index")
+            //8把去重复的数据保存到文件中
+            println("去重复后: " + listOne.size)
+            if (isLinux) {
+                KtStringUtil.saveAsFileWriter("/home/ccg/" + name + "1.json", GsonBuilder().create().toJson(listOne))
+            } else {
+                KtStringUtil.saveAsFileWriter("E:\\" + name + "1.json", GsonBuilder().create().toJson(listOne))
             }
-        }
-        listThree.clear()
-        //6对完整的数据进行去重操作
-        val set = LinkedHashSet<VideoBean>()
-        val list = ArrayList<VideoBean>()
-        set.addAll(listVideo)
-        list.addAll(set)
-        listVideo.clear()
-        //7去掉不完整的数据
-        val iterator = list.iterator()
-        while (iterator.hasNext()) {
-            val item = iterator.next()
-            if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
-                iterator.remove()
+            val endTime = System.currentTimeMillis()
+            println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
+        }else{
+            //4对数据进行分组，一组视频地址，一组缩略图
+            val listVideo = ArrayList<VideoBean>()
+            val listThree = ArrayList<VideoBean>()
+            for (videoUrlData in listOne) {
+                if (videoUrlData.getvUrl().isNotEmpty()) {
+                    listVideo.add(videoUrlData)
+                } else if (videoUrlData.getpUrl().isNotEmpty()) {
+                    listThree.add(videoUrlData)
+                }
             }
+            listOne.clear()
+            println("视频地址一共: " + listVideo.size)
+            //5把缩略图合并到视频地址中
+            for (index in listVideo.indices) {
+                for (pictureUrlData in listThree) {
+                    if (lexing == 1) {
+                        if (listVideo[index].id != pictureUrlData.id && listVideo[index].url == pictureUrlData.url) {
+                            listVideo[index].name = pictureUrlData.name
+                            listVideo[index].tags = pictureUrlData.tags
+                            listVideo[index].setpUrl(pictureUrlData.getpUrl())
+                            continue
+                        }
+                    }
+                }
+                if (index % 10000 == 0) {
+                    println("当前遍历到第: $index")
+                }
+            }
+            listThree.clear()
+            //6对完整的数据进行去重操作
+            val set = LinkedHashSet<VideoBean>()
+            val list = ArrayList<VideoBean>()
+            set.addAll(listVideo)
+            list.addAll(set)
+            listVideo.clear()
+            //7去掉不完整的数据
+            val iterator = list.iterator()
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item.getpUrl().isNullOrEmpty() || item.getvUrl().isNullOrEmpty()) {
+                    iterator.remove()
+                }
+            }
+            //8把去重复的数据保存到文件中
+            println("去重复后: " + list.size)
+            if (isLinux) {
+                KtStringUtil.saveAsFileWriter("/home/ccg/" + name + "1.json", GsonBuilder().create().toJson(list))
+            } else {
+                KtStringUtil.saveAsFileWriter("E:\\" + name + "1.json", GsonBuilder().create().toJson(list))
+            }
+            val endTime = System.currentTimeMillis()
+            println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
         }
-        //8把去重复的数据保存到文件中
-        println("去重复后: " + list.size)
 
-
-        if (isLinux) {
-            KtStringUtil.saveAsFileWriter(
-                "/home/ccg/" + name + "1.json",
-                GsonBuilder().create().toJson(list)
-            )
-        } else {
-            KtStringUtil.saveAsFileWriter(
-                "E:\\" + name + "1.json",
-                GsonBuilder().create().toJson(list)
-            )
-        }
-        val endTime = System.currentTimeMillis()
-        println("耗时：  " + (endTime - startTime) / 1000 / 60 + " 分钟")
     }
 
     /**
@@ -109,7 +141,7 @@ class BaihuzuUtilTest {
     fun cleaningDataTwo() {
         //1加载json文件到内存中
         val fileStr = if (isLinux) {
-            KtStringUtil.getStrInFile("/home/ccg/aqdtv1.json")
+            KtStringUtil.getStrInFile("/home/ccg/" + name + "1.json")
         } else {
             KtStringUtil.getStrInFile("E:\\" + name + "1.json")
         }
