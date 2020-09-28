@@ -15,15 +15,17 @@ import org.junit.Test
  * date : 2020/9/25 13:46
  */
 class AAAUtilTest {
-    //    val name = "baihuzu"
+//    val name = "baihuzu"
 //    val name = "gb"
-    val name = "hu"
+//    val name = "hu"
+//    val name = "bws"
+    val name = "ddxx"
 
 
     val isLinux = true
 
     fun getVideoType(name: String): Int {
-        return if ("baihuzu" == name || "hu" == name) {
+        return if ("baihuzu" == name || "hu" == name || "ddxx" == name) {
             //url   vurl
             1
         } else {
